@@ -1,4 +1,5 @@
 import {
+    Box,
     Checkbox,
     Table,
     TableBody,
@@ -9,6 +10,9 @@ import {
     TableRow,
     Typography,
 } from "@mui/material";
+import Grid from "@mui/material/Grid";
+import Paper from "@mui/material/Paper";
+import { styled } from "@mui/material/styles";
 import { NavLink } from "react-router-dom";
 
 function Dashboard() {
@@ -18,40 +22,48 @@ function Dashboard() {
         { id: 1, name: "Pui", quantity: 10 },
         { id: 1, name: "Pui", quantity: 10 },
         { id: 1, name: "Pui", quantity: 10 },
+        { id: 1, name: "Pui", quantity: 10 },
+        { id: 1, name: "Pui", quantity: 10 },
+        { id: 1, name: "Pui", quantity: 10 },
+        { id: 1, name: "Pui", quantity: 10 },
+        { id: 1, name: "Pui", quantity: 10 },
+        { id: 1, name: "Pui", quantity: 10 },
+        { id: 1, name: "Pui", quantity: 10 },
+        { id: 1, name: "Pui", quantity: 10 },
+        { id: 1, name: "Pui", quantity: 10 },
+        { id: 1, name: "Pui", quantity: 10 },
+        { id: 1, name: "Pui", quantity: 10 },
+        { id: 1, name: "Pui", quantity: 10 },
+        { id: 1, name: "Pui", quantity: 10 },
+        { id: 1, name: "Pui", quantity: 10 },
+        { id: 1, name: "Pui", quantity: 10 },
     ];
+
+    const Item = styled(Paper)(({ theme }) => ({
+        backgroundColor: "#fff",
+        ...theme.typography.body2,
+        padding: theme.spacing(1),
+        textAlign: "center",
+        color: (theme.vars ?? theme).palette.text.secondary,
+        ...theme.applyStyles("dark", {
+            backgroundColor: "#1A2027",
+        }),
+    }));
 
     return (
         <>
             <NavLink to={"/"}>Back</NavLink>
             <Typography>Dashboard</Typography>
-            <TableContainer>
-                <Table>
-                    <TableHead>
-                        <TableRow>
-                            <TableCell>
-                                <Checkbox />
-                            </TableCell>
-                            <TableCell align="center">Nume</TableCell>
-                            <TableCell align="center">Cantitate</TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {data.map((item) => (
-                            <TableRow>
-                                <TableCell>
-                                    <Checkbox />
-                                </TableCell>
-                                <TableCell align="center">
-                                    {item.name}
-                                </TableCell>
-                                <TableCell align="center">
-                                    {item.quantity}
-                                </TableCell>
-                            </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
-            </TableContainer>
+            <Grid container spacing={2}>
+                {data.map((item) => (
+                    <Grid key={item.id} size={2}>
+                        <Item>
+                            <Typography>{item.name}</Typography>
+                            <Typography>{item.quantity}</Typography>
+                        </Item>
+                    </Grid>
+                ))}
+            </Grid>
         </>
     );
 }
