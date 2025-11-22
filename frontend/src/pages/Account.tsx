@@ -6,7 +6,6 @@ function Account() {
     return (
         <>
             <NavLink to={"/"}>Back</NavLink>
-
             <Typography>Account</Typography>
         </>
     );
