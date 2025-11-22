@@ -50,7 +50,7 @@ public class ProductsController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Integer> putProduct(@PathVariable UUID id, @RequestBody ProductDTO dto) {
+    public ResponseEntity<Integer> putProduct(@PathVariable UUID id, @Valid @RequestBody ProductDTO dto) {
         int numberOfAffectedRows = this.productsService.updateProductById(id, dto);
         
         int statusCode = 200;
@@ -63,7 +63,7 @@ public class ProductsController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<Integer> patchProduct(@PathVariable UUID id, @RequestBody ProductDTO dto) {
+    public ResponseEntity<Integer> patchProduct(@PathVariable UUID id, @Valid @RequestBody ProductDTO dto) {
         int numberOfAffectedRows = this.productsService.updateProductById(id, dto);
 
         int statusCode = 200;

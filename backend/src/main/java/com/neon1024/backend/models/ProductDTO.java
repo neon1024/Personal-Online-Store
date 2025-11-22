@@ -5,13 +5,11 @@ import java.util.UUID;
 
 import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 public class ProductDTO {
     public UUID id;
-    @NotNull
     @Size(max = 128)
     public String name;
     @Size(max = 64)
