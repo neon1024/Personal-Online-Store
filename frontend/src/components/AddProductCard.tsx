@@ -4,29 +4,47 @@ import Card from "@mui/material/Card";
 import CardActionArea from "@mui/material/CardActionArea";
 import CardContent from "@mui/material/CardContent";
 
+import { useState } from "react";
+import AddProductForm from "./AddProductForm";
+
 function AddProductCard() {
-    const handleAddProduct = () => {};
+    const [addProductFormVisibility, setAddProductFormVisibility] =
+        useState(false);
+
+    const toggleAddProductFormVisibility = () => {
+        setAddProductFormVisibility((prev) => !prev);
+    };
+
+    const handleAddProduct = () => {
+        toggleAddProductFormVisibility();
+    };
 
     return (
-        <Card variant="outlined" sx={{ width: 300, height: 400 }}>
-            <CardActionArea
-                sx={{ height: "100%" }}
-                onClick={() => handleAddProduct()}
-            >
-                <CardContent sx={{ height: "100%" }}>
-                    <Box
-                        sx={{
-                            height: "100%",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                        }}
-                    >
-                        <AddIcon sx={{ fontSize: 32 }} />
-                    </Box>
-                </CardContent>
-            </CardActionArea>
-        </Card>
+        <>
+            <AddProductForm
+                visibility={addProductFormVisibility}
+                toggleVisibility={toggleAddProductFormVisibility}
+            />
+            <Card variant="outlined" sx={{ width: 300, height: 400 }}>
+                <CardActionArea
+                    sx={{ height: "100%" }}
+                    onClick={() => handleAddProduct()}
+                >
+                    <CardContent sx={{ height: "100%" }}>
+                        <Box
+                            sx={{
+                                height: "100%",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                            }}
+                        >
+                            <AddIcon sx={{ fontSize: 32 }} />
+                        </Box>
+                    </CardContent>
+                </CardActionArea>
+            </Card>
+        </>
     );
 }
 
