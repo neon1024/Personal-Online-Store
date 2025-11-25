@@ -4,6 +4,7 @@ import { NavLink } from "react-router-dom";
 
 import ProductCard from "../components/ProductCard";
 
+import AddProductCard from "../components/AddProductCard";
 import Product from "../models/Product";
 
 function Dashboard() {
@@ -112,10 +113,11 @@ function Dashboard() {
             <Typography>Dashboard</Typography>
             <Grid container spacing={2}>
                 {products.map((product) => (
-                    <Grid key={product.getId()} size={2}>
+                    <Grid key={product.getId()} size={3}>
                         <ProductCard product={product} />
                     </Grid>
                 ))}
+                <AddProductCard />
             </Grid>
         </>
     );

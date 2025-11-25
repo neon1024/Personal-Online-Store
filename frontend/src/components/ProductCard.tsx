@@ -13,9 +13,7 @@ interface ProductCardProps {
 function ProductCard({ product }: ProductCardProps) {
     return (
         <>
-            <Typography>Product</Typography>
-
-            <Card variant="outlined">
+            <Card variant="outlined" sx={{ width: 300, height: 400 }}>
                 <CardContent>
                     <CardMedia
                         sx={{ height: 200 }}

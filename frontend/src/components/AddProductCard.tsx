@@ -1,0 +1,33 @@
+import AddIcon from "@mui/icons-material/Add";
+import Box from "@mui/material/Box";
+import Card from "@mui/material/Card";
+import CardActionArea from "@mui/material/CardActionArea";
+import CardContent from "@mui/material/CardContent";
+
+function AddProductCard() {
+    const handleAddProduct = () => {};
+
+    return (
+        <Card variant="outlined" sx={{ width: 300, height: 400 }}>
+            <CardActionArea
+                sx={{ height: "100%" }}
+                onClick={() => handleAddProduct()}
+            >
+                <CardContent sx={{ height: "100%" }}>
+                    <Box
+                        sx={{
+                            height: "100%",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                        }}
+                    >
+                        <AddIcon sx={{ fontSize: 32 }} />
+                    </Box>
+                </CardContent>
+            </CardActionArea>
+        </Card>
+    );
+}
+
+export default AddProductCard;
