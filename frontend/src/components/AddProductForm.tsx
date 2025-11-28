@@ -3,7 +3,9 @@ import {
     DialogActions,
     DialogContent,
     DialogTitle,
+    IconButton,
     TextField,
+    Typography,
 } from "@mui/material";
 
 import Select from "@mui/material/Select";
@@ -13,6 +15,16 @@ import MenuItem from "@mui/material/MenuItem";
 import Stack from "@mui/material/Stack";
 
 import Button from "@mui/material/Button";
+
+import Grid from "@mui/material/Grid";
+
+import ImageUploading, { type ImageListType } from "react-images-uploading";
+
+import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
+import DeleteIcon from "@mui/icons-material/Delete";
+import DeleteSweepIcon from "@mui/icons-material/DeleteSweep";
+
+import Box from "@mui/material/Box";
 
 import { useState } from "react";
 
@@ -52,6 +64,8 @@ function AddProductForm({ visibility, toggleVisibility }: AddProductFormProps) {
         },
     ];
 
+    const MAX_NUMBER_OF_IMAGES_TO_UPLOAD_PER_PRODUCT = 8;
+
     const [name, setName] = useState("");
     const [category, setCategory] = useState("");
     const [description, setDescription] = useState("");
@@ -62,9 +76,20 @@ function AddProductForm({ visibility, toggleVisibility }: AddProductFormProps) {
     const [unit, setUnit] = useState("Kg");
     const [imageUrl, setImageUrl] = useState("");
 
+    // TODO
     async function handleAddProduct() {
         alert("ok");
     }
+
+    const [images, setImages] = useState([]);
+
+    const handleImageUpload = (
+        imageList: ImageListType,
+        addUpdateIndex: number[] | undefined
+    ) => {
+        // TODO save only the URLs
+        setImages(imageList as never[]);
+    };
 
     return (
         <>
@@ -185,6 +210,137 @@ function AddProductForm({ visibility, toggleVisibility }: AddProductFormProps) {
                                 ))}
                             </Select>
                         </Stack>
+
+                        <Box sx={{ paddingTop: 2 }}>
+                            <ImageUploading
+                                multiple
+                                value={images}
+                                onChange={handleImageUpload}
+                                maxNumber={
+                                    MAX_NUMBER_OF_IMAGES_TO_UPLOAD_PER_PRODUCT
+                                }
+                                onError={() => alert("Maxim 8 poze")}
+                            >
+                                {({
+                                    imageList,
+                                    onImageUpload,
+                                    onImageRemoveAll,
+                                    // onImageUpdate,
+                                    onImageRemove,
+                                    isDragging,
+                                    dragProps,
+                                }) => (
+                                    // write your building UI
+                                    <Grid container spacing={2}>
+                                        <Stack
+                                            direction={"row"}
+                                            spacing={2}
+                                            sx={{
+                                                width: "100%",
+                                                justifyContent: "space-evenly",
+                                                alignItems: "center",
+                                            }}
+                                        >
+                                            {/* TODO change dragging color */}
+                                            <IconButton
+                                                sx={{
+                                                    borderRadius: 16,
+                                                    "&:hover": {
+                                                        backgroundColor: "gray",
+                                                        borderRadius: 16,
+                                                    },
+                                                    justifyContent:
+                                                        "space-between",
+                                                }}
+                                                style={
+                                                    isDragging
+                                                        ? { color: "blue" }
+                                                        : undefined
+                                                }
+                                                onClick={onImageUpload}
+                                                {...dragProps}
+                                            >
+                                                <AddPhotoAlternateIcon fontSize="large" />
+                                                Adauga Poza
+                                            </IconButton>
+                                            {/* TODO change dragging color */}
+                                            <IconButton
+                                                onClick={onImageRemoveAll}
+                                                sx={{
+                                                    borderRadius: 16,
+                                                    "&:hover": {
+                                                        backgroundColor: "gray",
+                                                        borderRadius: 16,
+                                                    },
+                                                    justifyContent:
+                                                        "space-between",
+                                                }}
+                                                style={
+                                                    isDragging
+                                                        ? { color: "blue" }
+                                                        : undefined
+                                                }
+                                            >
+                                                <DeleteSweepIcon fontSize="large" />
+                                                Elimina toate pozele
+                                            </IconButton>
+                                        </Stack>
+                                        {imageList.map((image, index) => (
+                                            <Grid
+                                                key={index}
+                                                size={3}
+                                                justifyItems={"center"}
+                                                sx={{
+                                                    borderStyle: "solid",
+                                                    borderBottomLeftRadius: 16,
+                                                    borderBottomRightRadius: 16,
+                                                    borderWidth: 1,
+                                                }}
+                                            >
+                                                <Box overflow={"hidden"}>
+                                                    <img
+                                                        src={image.dataURL}
+                                                        alt={`Imagine ${
+                                                            index + 1
+                                                        }`}
+                                                        title={`Imagine ${
+                                                            index + 1
+                                                        }`}
+                                                        width="100%"
+                                                    />
+                                                </Box>
+
+                                                <IconButton
+                                                    sx={{
+                                                        borderRadius: 16,
+                                                        "&:hover": {
+                                                            backgroundColor:
+                                                                "gray",
+                                                            borderRadius: 16,
+                                                        },
+                                                        justifyContent:
+                                                            "space-between",
+                                                    }}
+                                                    style={
+                                                        isDragging
+                                                            ? { color: "blue" }
+                                                            : undefined
+                                                    }
+                                                    onClick={() =>
+                                                        onImageRemove(index)
+                                                    }
+                                                >
+                                                    <DeleteIcon fontSize="small" />
+                                                    <Typography fontSize={16}>
+                                                        Elimina
+                                                    </Typography>
+                                                </IconButton>
+                                            </Grid>
+                                        ))}
+                                    </Grid>
+                                )}
+                            </ImageUploading>
+                        </Box>
                     </form>
                 </DialogContent>
                 <DialogActions
