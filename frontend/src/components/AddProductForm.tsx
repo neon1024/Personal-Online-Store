@@ -230,7 +230,6 @@ function AddProductForm({ visibility, toggleVisibility }: AddProductFormProps) {
                                     isDragging,
                                     dragProps,
                                 }) => (
-                                    // write your building UI
                                     <Grid container spacing={2}>
                                         <Stack
                                             direction={"row"}
@@ -286,18 +285,18 @@ function AddProductForm({ visibility, toggleVisibility }: AddProductFormProps) {
                                             </IconButton>
                                         </Stack>
                                         {imageList.map((image, index) => (
-                                            <Grid
-                                                key={index}
-                                                size={3}
-                                                justifyItems={"center"}
-                                                sx={{
-                                                    borderStyle: "solid",
-                                                    borderBottomLeftRadius: 16,
-                                                    borderBottomRightRadius: 16,
-                                                    borderWidth: 1,
-                                                }}
-                                            >
-                                                <Box overflow={"hidden"}>
+                                            <Grid key={index} size={3}>
+                                                <Box
+                                                    sx={{
+                                                        position: "relative",
+                                                        width: "100%",
+                                                        height: "100%",
+                                                        borderRadius: 2,
+                                                        overflow: "hidden",
+                                                        borderWidth: 1,
+                                                        borderStyle: "solid",
+                                                    }}
+                                                >
                                                     <img
                                                         src={image.dataURL}
                                                         alt={`Imagine ${
@@ -306,35 +305,45 @@ function AddProductForm({ visibility, toggleVisibility }: AddProductFormProps) {
                                                         title={`Imagine ${
                                                             index + 1
                                                         }`}
-                                                        width="100%"
+                                                        style={{
+                                                            width: "100%",
+                                                            height: "100%",
+                                                            objectFit: "cover",
+                                                            display: "block",
+                                                        }}
                                                     />
-                                                </Box>
 
-                                                <IconButton
-                                                    sx={{
-                                                        borderRadius: 16,
-                                                        "&:hover": {
+                                                    <IconButton
+                                                        onClick={() =>
+                                                            onImageRemove(index)
+                                                        }
+                                                        sx={{
+                                                            position:
+                                                                "absolute",
+                                                            top: 8,
+                                                            right: 8,
                                                             backgroundColor:
-                                                                "gray",
-                                                            borderRadius: 16,
-                                                        },
-                                                        justifyContent:
-                                                            "space-between",
-                                                    }}
-                                                    style={
-                                                        isDragging
-                                                            ? { color: "blue" }
-                                                            : undefined
-                                                    }
-                                                    onClick={() =>
-                                                        onImageRemove(index)
-                                                    }
-                                                >
-                                                    <DeleteIcon fontSize="small" />
-                                                    <Typography fontSize={16}>
-                                                        Elimina
-                                                    </Typography>
-                                                </IconButton>
+                                                                "rgba(0,0,0,0.55)",
+                                                            color: "white",
+                                                            borderRadius: 2,
+
+                                                            transition:
+                                                                "box-shadow 180ms ease, background-color 180ms ease",
+
+                                                            "&:hover": {
+                                                                backgroundColor:
+                                                                    "rgba(0,0,0,0.75)",
+                                                                boxShadow:
+                                                                    "0 8px 24px rgba(255, 0, 0, 0.55)",
+                                                                "& svg": {
+                                                                    color: "red",
+                                                                },
+                                                            },
+                                                        }}
+                                                    >
+                                                        <DeleteIcon fontSize="small" />
+                                                    </IconButton>
+                                                </Box>
                                             </Grid>
                                         ))}
                                     </Grid>
