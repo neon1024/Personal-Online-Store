@@ -25,9 +25,26 @@ function AddProductCard() {
                 visibility={addProductFormVisibility}
                 toggleVisibility={toggleAddProductFormVisibility}
             />
-            <Card variant="outlined" sx={{ width: 300, height: 400 }}>
+            <Card
+                variant="outlined"
+                sx={{
+                    width: 300,
+                    height: 400,
+
+                    transition: "box-shadow 300ms ease-in-out",
+
+                    "&:hover": {
+                        boxShadow: "0px 0px 16px 4px rgba(97, 219, 251, 1)",
+                        "& svg": {
+                            color: "rgba(97, 219, 251, 1)",
+                        },
+                    },
+                }}
+            >
                 <CardActionArea
-                    sx={{ height: "100%" }}
+                    sx={{
+                        height: "100%",
+                    }}
                     onClick={() => handleAddProduct()}
                 >
                     <CardContent sx={{ height: "100%" }}>
