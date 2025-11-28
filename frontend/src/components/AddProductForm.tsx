@@ -231,59 +231,83 @@ function AddProductForm({ visibility, toggleVisibility }: AddProductFormProps) {
                                     dragProps,
                                 }) => (
                                     <Grid container spacing={2}>
-                                        <Stack
-                                            direction={"row"}
-                                            spacing={2}
+                                        <Box
                                             sx={{
                                                 width: "100%",
+                                                display: "flex",
                                                 justifyContent: "space-evenly",
-                                                alignItems: "center",
+                                                flexWrap: "wrap",
+                                                pt: 2,
+                                                pb: 2,
                                             }}
                                         >
-                                            {/* TODO change dragging color */}
-                                            <IconButton
-                                                sx={{
-                                                    borderRadius: 16,
-                                                    "&:hover": {
-                                                        backgroundColor: "gray",
-                                                        borderRadius: 16,
-                                                    },
-                                                    justifyContent:
-                                                        "space-between",
-                                                }}
-                                                style={
-                                                    isDragging
-                                                        ? { color: "blue" }
-                                                        : undefined
-                                                }
+                                            {/* Upload */}
+                                            <Button
                                                 onClick={onImageUpload}
+                                                variant="contained"
                                                 {...dragProps}
+                                                sx={{
+                                                    px: 3,
+                                                    py: 1.2,
+                                                    borderRadius: 3,
+                                                    fontSize: 15,
+                                                    textTransform: "none",
+                                                    boxShadow: 2,
+                                                    display: "flex",
+                                                    alignItems: "center",
+                                                    gap: 1.2,
+                                                    transition: "0.18s",
+                                                    ...(isDragging && {
+                                                        color: "dodgerblue",
+                                                    }),
+
+                                                    "&:hover": {
+                                                        boxShadow: 6,
+                                                        transform:
+                                                            "scale(1.04)",
+                                                    },
+                                                }}
                                             >
                                                 <AddPhotoAlternateIcon fontSize="large" />
-                                                Adauga Poza
-                                            </IconButton>
-                                            {/* TODO change dragging color */}
-                                            <IconButton
+                                                <Typography fontSize={16}>
+                                                    Adauga poza
+                                                </Typography>
+                                            </Button>
+
+                                            {/* Remove All */}
+                                            <Button
                                                 onClick={onImageRemoveAll}
+                                                variant="outlined"
                                                 sx={{
-                                                    borderRadius: 16,
+                                                    px: 3,
+                                                    py: 1.2,
+                                                    borderRadius: 3,
+                                                    fontSize: 15,
+                                                    textTransform: "none",
+                                                    borderWidth: 1.5,
+                                                    display: "flex",
+                                                    alignItems: "center",
+                                                    gap: 1.2,
+                                                    transition: "0.18s",
+
                                                     "&:hover": {
-                                                        backgroundColor: "gray",
-                                                        borderRadius: 16,
+                                                        boxShadow: 6,
+                                                        transform:
+                                                            "scale(1.04)",
+                                                        borderColor: "crimson",
+                                                        "& svg": {
+                                                            color: "crimson",
+                                                        },
                                                     },
-                                                    justifyContent:
-                                                        "space-between",
                                                 }}
-                                                style={
-                                                    isDragging
-                                                        ? { color: "blue" }
-                                                        : undefined
-                                                }
                                             >
                                                 <DeleteSweepIcon fontSize="large" />
-                                                Elimina toate pozele
-                                            </IconButton>
-                                        </Stack>
+                                                <Typography fontSize={16}>
+                                                    Elimina toate pozele
+                                                </Typography>
+                                            </Button>
+                                        </Box>
+
                                         {imageList.map((image, index) => (
                                             <Grid key={index} size={3}>
                                                 <Box
