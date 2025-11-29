@@ -1,147 +1,200 @@
-// import { Typography } from "@mui/material";
-
-// import Card from "@mui/material/Card";
-// import CardContent from "@mui/material/CardContent";
-// import CardMedia from "@mui/material/CardMedia";
-
-// import Product from "../models/Product";
-
-// interface ProductCardProps {
-//     product: Product | null;
-// }
-
-// function ProductCard({ product }: ProductCardProps) {
-//     return (
-//         <>
-//             <Card variant="outlined" sx={{ width: 300, height: 400 }}>
-//                 <CardContent>
-//                     <CardMedia
-//                         sx={{ height: 200 }}
-//                         image={product?.getImageUrl()}
-//                         title={product?.getName()}
-//                     />
-//                     <Typography>Nume: {product?.getName()}</Typography>
-//                     <Typography>Categorie: {product?.getCategory()}</Typography>
-//                     <Typography>
-//                         Descriere: {product?.getDescription()}
-//                     </Typography>
-//                     <Typography>
-//                         Pret:{" "}
-//                         {product?.getPrice() + " " + product?.getCurrency()}
-//                     </Typography>
-//                     <Typography>Cantitate: {product?.getQuantity()}</Typography>
-//                     <Typography>
-//                         Greutate:{" "}
-//                         {product?.getWeight() + "" + product?.getUnit()}
-//                     </Typography>
-//                 </CardContent>
-//             </Card>
-//         </>
-//     );
-// }
-
-// export default ProductCard;
-
-import { Typography, IconButton, Card, CardContent, CardMedia, Box, Stack, Tooltip } from "@mui/material";
-import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
+import {
+    Box,
+    Card,
+    CardContent,
+    CardMedia,
+    IconButton,
+    Stack,
+    Tooltip,
+    Typography,
+} from "@mui/material";
+
 import Product from "../models/Product";
 
+import { useState } from "react";
+import EditProductForm from "./EditProductForm";
+
 interface ProductCardProps {
-  product: Product | null;
-  onEdit: (product: Product | null) => Promise<void>;
-  onDelete: (product: Product | null) => Promise<void>;
+    product: Product | null;
+    onEdit: (product: Product | null) => Promise<void>;
+    onDelete: (product: Product | null) => Promise<void>;
 }
 
 function ProductCard({ product, onEdit, onDelete }: ProductCardProps) {
-  if (!product) return null;
+    const [editProductFormVisibility, setEditProductFormVisibility] =
+        useState(false);
 
-  return (
-    <Card
-      variant="outlined"
-      sx={{
-        width: 300,
-        height: 400,
-        borderRadius: 3,
-        overflow: "hidden",
-        transition: "0.25s",
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "space-between",
-        "&:hover": {
-          transform: "translateY(-6px)",
-          boxShadow: 5,
-        },
-      }}
-    >
-      <CardContent sx={{ p: 0 }}>
-        <CardMedia
-          image={product.getImageUrl()}
-          title={product.getName()}
-          sx={{
-            height: 190,
-            width: "100%",
-            objectFit: "cover",
-            borderBottom: "1px solid rgba(0,0,0,0.12)",
-          }}
-        />
+    const toggleEditProductFormVisibility = () => {
+        setEditProductFormVisibility((prev) => !prev);
+    };
 
-        <Box sx={{ px: 2, pt: 1.5 }}>
-          <Stack spacing={0.6}>
-            <Typography fontSize={18} fontWeight={600}>{product.getName()}</Typography>
-            <Typography fontSize={14} color="text.secondary">{product.getCategory() || "Fara categorie"}</Typography>
+    if (!product) return null;
 
-            <Typography
-              fontSize={13}
-              sx={{
-                mt: 1,
-                height: 48,
-                overflow: "hidden",
-                textOverflow: "ellipsis",
-                display: "-webkit-box",
-                WebkitLineClamp: 3,
-                WebkitBoxOrient: "vertical",
-              }}
+    return (
+        <>
+            <EditProductForm
+                product={product}
+                updateProduct={onEdit}
+                visibility={editProductFormVisibility}
+                toggleVisibility={toggleEditProductFormVisibility}
+            />
+            <Card
+                variant="outlined"
+                sx={{
+                    width: 300, // fixed width
+                    height: 450, // fixed height
+                    borderRadius: 4,
+                    overflow: "hidden",
+                    transition: "0.25s",
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "space-between",
+                    "&:hover": {
+                        transform: "translateY(-6px)",
+                        boxShadow: 5,
+                    },
+                }}
             >
-              {product.getDescription() || "Fara descriere"}
-            </Typography>
+                {/* Image */}
+                <CardMedia
+                    image={product.getImageUrl()}
+                    title={product.getName()}
+                    sx={{
+                        height: 150, // fixed image height
+                        width: "100%",
+                        objectFit: "cover",
+                        borderBottom: "1px solid rgba(0,0,0,0.12)",
+                    }}
+                />
 
-            <Typography fontSize={16} fontWeight={700} sx={{ mt: 1 }}>
-              {product.getPrice()} {product.getCurrency()}
-            </Typography>
+                {/* Content */}
+                <CardContent sx={{ flexGrow: 1, px: 2, pt: 1 }}>
+                    <Stack spacing={0.5}>
+                        <Typography
+                            fontSize={20}
+                            fontWeight={600}
+                            sx={{
+                                whiteSpace: "nowrap",
+                                overflow: "hidden",
+                                textOverflow: "ellipsis",
+                            }}
+                            title={product.getName()}
+                        >
+                            {product.getName()}
+                        </Typography>
 
-            <Typography fontSize={13}>Cantitate: {product.getQuantity()}</Typography>
-            <Typography fontSize={13}>Greutate: {product.getWeight()} {product.getUnit()}</Typography>
-          </Stack>
-        </Box>
-      </CardContent>
+                        <Typography
+                            fontSize={14}
+                            color="text.secondary"
+                            sx={{
+                                whiteSpace: "nowrap",
+                                overflow: "hidden",
+                                textOverflow: "ellipsis",
+                            }}
+                            title={product.getCategory() || "Fara categorie"}
+                        >
+                            {product.getCategory() || "Fara categorie"}
+                        </Typography>
 
-      {/* Buttons Section */}
-      <Box sx={{ pb: 1.2 }}>
-        <Stack direction="row" justifyContent="space-around">
-          <Tooltip title="Editeaza">
-            <IconButton onClick={() => onEdit(product)}>
-              <EditIcon />
-            </IconButton>
-          </Tooltip>
+                        <Typography
+                            fontSize={14}
+                            sx={{
+                                whiteSpace: "nowrap",
+                                overflow: "hidden",
+                                textOverflow: "ellipsis",
+                            }}
+                            title={product.getDescription() || "Fara descriere"}
+                        >
+                            {product.getDescription() || "Fara descriere"}
+                        </Typography>
 
-          <Tooltip title="Sterge" arrow>
-            <IconButton
-              onClick={() => onDelete(product)}
-              sx={{
-                "&:hover": {
-                  backgroundColor: "rgba(255,0,0,0.08)",
-                  "& svg": { color: "red" },
-                },
-              }}
-            >
-              <DeleteIcon />
-            </IconButton>
-          </Tooltip>
-        </Stack>
-      </Box>
-    </Card>
-  );
+                        <Typography
+                            fontSize={16}
+                            fontWeight={700}
+                            sx={{
+                                whiteSpace: "nowrap",
+                                overflow: "hidden",
+                                textOverflow: "ellipsis",
+                            }}
+                            title={`${product.getPrice()} ${product.getCurrency()}`}
+                        >
+                            {product.getPrice()} {product.getCurrency()}
+                        </Typography>
+
+                        <Typography
+                            fontSize={14}
+                            sx={{
+                                whiteSpace: "nowrap",
+                                overflow: "hidden",
+                                textOverflow: "ellipsis",
+                            }}
+                            title={`Cantitate: ${product.getQuantity()}`}
+                        >
+                            Cantitate: {product.getQuantity()}
+                        </Typography>
+
+                        <Typography
+                            fontSize={14}
+                            sx={{
+                                whiteSpace: "nowrap",
+                                overflow: "hidden",
+                                textOverflow: "ellipsis",
+                            }}
+                            title={`Greutate: ${product.getWeight()} ${product.getUnit()}`}
+                        >
+                            Greutate: {product.getWeight()} {product.getUnit()}
+                        </Typography>
+                    </Stack>
+                </CardContent>
+
+                {/* Buttons Section */}
+                <Box sx={{ pb: 2, pt: 1 }}>
+                    <Stack direction="row" justifyContent="space-evenly">
+                        <Tooltip title="Editeaza">
+                            <IconButton
+                                size="large"
+                                onClick={toggleEditProductFormVisibility}
+                                sx={{
+                                    borderRadius: 4,
+                                    backgroundColor: "rgba(255, 255, 0, 0.15)",
+                                    "&:hover": {
+                                        backgroundColor:
+                                            "rgba(255, 255, 0, 0.35)",
+                                        "& svg": { color: "black" },
+                                    },
+                                    "&:focus": { outline: "none" },
+                                }}
+                            >
+                                <EditIcon />
+                                <Typography fontSize={12}>Editeaza</Typography>
+                            </IconButton>
+                        </Tooltip>
+
+                        <Tooltip title="Sterge" arrow>
+                            <IconButton
+                                size="large"
+                                onClick={() => onDelete(product)}
+                                sx={{
+                                    borderRadius: 4,
+                                    backgroundColor: "rgba(255,0,0,0.05)",
+                                    "&:hover": {
+                                        backgroundColor: "rgba(255,0,0,0.15)",
+                                        "& svg": { color: "red" },
+                                    },
+                                    "&:focus": { outline: "none" },
+                                }}
+                            >
+                                <DeleteIcon />
+                                <Typography fontSize={12}>Sterge</Typography>
+                            </IconButton>
+                        </Tooltip>
+                    </Stack>
+                </Box>
+            </Card>
+        </>
+    );
 }
 
 export default ProductCard;

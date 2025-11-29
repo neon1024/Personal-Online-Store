@@ -251,7 +251,7 @@ function AddProductForm({ visibility, toggleVisibility }: AddProductFormProps) {
                                                 sx={{
                                                     px: 3,
                                                     py: 1.2,
-                                                    borderRadius: 3,
+                                                    borderRadius: 4,
                                                     fontSize: 15,
                                                     textTransform: "none",
                                                     boxShadow: 2,
@@ -283,7 +283,7 @@ function AddProductForm({ visibility, toggleVisibility }: AddProductFormProps) {
                                                 sx={{
                                                     px: 3,
                                                     py: 1.2,
-                                                    borderRadius: 3,
+                                                    borderRadius: 4,
                                                     fontSize: 15,
                                                     textTransform: "none",
                                                     borderWidth: 1.5,
@@ -317,7 +317,7 @@ function AddProductForm({ visibility, toggleVisibility }: AddProductFormProps) {
                                                         position: "relative",
                                                         width: "100%",
                                                         height: "100%",
-                                                        borderRadius: 2,
+                                                        borderRadius: 4,
                                                         overflow: "hidden",
                                                         borderWidth: 1,
                                                         borderStyle: "solid",
@@ -351,7 +351,7 @@ function AddProductForm({ visibility, toggleVisibility }: AddProductFormProps) {
                                                             backgroundColor:
                                                                 "rgba(0,0,0,0.55)",
                                                             color: "white",
-                                                            borderRadius: 2,
+                                                            borderRadius: 4,
 
                                                             transition:
                                                                 "box-shadow 180ms ease, background-color 180ms ease",

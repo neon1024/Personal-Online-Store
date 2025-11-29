@@ -48,21 +48,26 @@ function Dashboard() {
     }, []);
 
     async function onDeleteProduct(product: Product | null) {
-        // TODO
+        if (!product) return;
+
+        // Remove from UI immediately
+        setProducts((prev) =>
+            prev.filter((p) => p.getId() !== product.getId())
+        );
+
+        // Then delete on backend
         const response = await fetch(
-            `http://localhost:8080/products/${product?.getId()}`,
+            `http://localhost:8080/products/${product.getId()}`,
             { method: "DELETE" }
         );
 
         const data = await response.json();
 
-        if (data) {
-            console.log("Delete successful");
-        } else {
+        if (!data) {
             console.log("Delete failed");
+            // Optionally refetch or restore state
+            await getProducts();
         }
-
-        await getProducts();
     }
 
     async function onEditProduct(product: Product | null) {
@@ -75,9 +80,9 @@ function Dashboard() {
         <>
             <NavLink to={"/"}>Back</NavLink>
             <Typography>Dashboard</Typography>
-            <Grid container spacing={2}>
+            <Grid container spacing={2} wrap="wrap" justifyContent="flex-start">
                 {products?.map((product) => (
-                    <Grid key={product.getId()} size={3}>
+                    <Grid key={product.getId()} sx={{ width: 300 }}>
                         <ProductCard
                             product={product}
                             onEdit={() => onEditProduct(product)}
@@ -85,7 +90,9 @@ function Dashboard() {
                         />
                     </Grid>
                 ))}
-                <AddProductCard />
+                <Grid sx={{ width: 300 }}>
+                    <AddProductCard />
+                </Grid>
             </Grid>
         </>
     );
