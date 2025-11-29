@@ -83,6 +83,7 @@ function AddProductForm({ visibility, toggleVisibility }: AddProductFormProps) {
 
     const [images, setImages] = useState([]);
 
+    // TODO
     const handleImageUpload = (
         imageList: ImageListType,
         addUpdateIndex: number[] | undefined
@@ -211,6 +212,7 @@ function AddProductForm({ visibility, toggleVisibility }: AddProductFormProps) {
                             </Select>
                         </Stack>
 
+                        {/* TODO drag to order */}
                         <Box sx={{ paddingTop: 2 }}>
                             <ImageUploading
                                 multiple
