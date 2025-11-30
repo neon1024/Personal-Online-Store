@@ -73,7 +73,7 @@ function EditProductForm({
 
     // TODO validate numbers
     const handleUpdateProduct = async () => {
-        if (!product) return; // exit if product is null
+        if (!product) return;
 
         const updatedProduct = new Product(
             product.getId(),
@@ -85,7 +85,7 @@ function EditProductForm({
             Number(quantity),
             Number(weight),
             unit,
-            images[0]?.dataURL || "" // or handle multiple images as needed
+            product.getImageUrl()
         );
 
         await updateProduct(updatedProduct);

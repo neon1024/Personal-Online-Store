@@ -43,8 +43,8 @@ function ProductCard({ product, onEdit, onDelete }: ProductCardProps) {
             <Card
                 variant="outlined"
                 sx={{
-                    width: 300, // fixed width
-                    height: 450, // fixed height
+                    width: 300,
+                    height: 450,
                     borderRadius: 4,
                     overflow: "hidden",
                     transition: "0.25s",
@@ -62,7 +62,7 @@ function ProductCard({ product, onEdit, onDelete }: ProductCardProps) {
                     image={product.getImageUrl()}
                     title={product.getName()}
                     sx={{
-                        height: 150, // fixed image height
+                        height: 150,
                         width: "100%",
                         objectFit: "cover",
                         borderBottom: "1px solid rgba(0,0,0,0.12)",

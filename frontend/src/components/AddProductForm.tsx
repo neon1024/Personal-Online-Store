@@ -28,12 +28,21 @@ import Box from "@mui/material/Box";
 
 import { useState } from "react";
 
+import { useEffect } from "react";
+
+import Product from "../models/Product";
+
 interface AddProductFormProps {
+    addProduct: (product: Product) => Promise<void>;
     visibility: boolean;
     toggleVisibility: () => void;
 }
 
-function AddProductForm({ visibility, toggleVisibility }: AddProductFormProps) {
+function AddProductForm({
+    addProduct,
+    visibility,
+    toggleVisibility,
+}: AddProductFormProps) {
     const currencies = [
         {
             value: "RON",
@@ -76,9 +85,37 @@ function AddProductForm({ visibility, toggleVisibility }: AddProductFormProps) {
     const [unit, setUnit] = useState("Kg");
     const [imageUrl, setImageUrl] = useState("");
 
+    useEffect(() => {
+        setName("");
+        setCategory("");
+        setDescription("");
+        setPrice("");
+        setCurrency("RON");
+        setQuantity("0");
+        setWeight("0");
+        setUnit("Kg");
+        setImageUrl("");
+    }, [visibility]); // resets all the values whenever the form is opened, meaning that visibility changes
+
     // TODO
+    // TODO validate numbers
     async function handleAddProduct() {
-        alert("ok");
+        await addProduct(
+            new Product(
+                "",
+                name,
+                category,
+                description,
+                Number(price),
+                currency,
+                Number(quantity),
+                Number(weight),
+                unit,
+                imageUrl
+            )
+        );
+
+        toggleVisibility();
     }
 
     const [images, setImages] = useState([]);
@@ -98,7 +135,10 @@ function AddProductForm({ visibility, toggleVisibility }: AddProductFormProps) {
                 <DialogTitle>Adaugare Produs</DialogTitle>
                 <DialogContent>
                     <form
-                        onSubmit={() => handleAddProduct()}
+                        onSubmit={(e) => {
+                            e.preventDefault();
+                            handleAddProduct();
+                        }}
                         id="add-product-form"
                     >
                         <TextField
@@ -115,7 +155,7 @@ function AddProductForm({ visibility, toggleVisibility }: AddProductFormProps) {
                                 setName(e.target.value);
                                 (
                                     e.target as HTMLInputElement
-                                ).setCustomValidity(""); // reset
+                                ).setCustomValidity("");
                             }}
                             onInvalid={(e) => {
                                 (

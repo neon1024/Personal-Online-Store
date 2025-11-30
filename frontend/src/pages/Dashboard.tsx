@@ -47,6 +47,23 @@ function Dashboard() {
         getProducts();
     }, []);
 
+    async function postProduct(product: Product) {
+        // optimistically update products
+        setProducts((prev) => [...prev, product]);
+
+        const response = await fetch("http://localhost:8080/products", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(product),
+        });
+
+        const data = await response.json();
+
+        console.log(data);
+
+        await getProducts();
+    }
+
     async function onDeleteProduct(product: Product | null) {
         if (!product) return;
 
@@ -70,8 +87,32 @@ function Dashboard() {
         }
     }
 
-    async function onEditProduct(product: Product | null) {
-        // TODO
+    // TODO
+    async function updateProduct(product: Product | null) {
+        if (!product) return;
+
+        console.log(product);
+
+        // optimistically update UI
+        setProducts((prev) =>
+            prev.map((p) => (p.getId() === product.getId() ? product : p))
+        );
+
+        // update on backend
+        const response = await fetch(
+            `http://localhost:8080/products/${product.getId()}`,
+            {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(product),
+            }
+        );
+
+        const data = await response.json();
+
+        console.log(data);
 
         await getProducts();
     }
@@ -85,13 +126,13 @@ function Dashboard() {
                     <Grid key={product.getId()} sx={{ width: 300 }}>
                         <ProductCard
                             product={product}
-                            onEdit={() => onEditProduct(product)}
-                            onDelete={() => onDeleteProduct(product)}
+                            onEdit={updateProduct}
+                            onDelete={onDeleteProduct}
                         />
                     </Grid>
                 ))}
                 <Grid sx={{ width: 300 }}>
-                    <AddProductCard />
+                    <AddProductCard addProduct={postProduct} />
                 </Grid>
             </Grid>
         </>
