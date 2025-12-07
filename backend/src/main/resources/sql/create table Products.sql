@@ -9,6 +9,5 @@ CREATE TABLE IF NOT EXISTS Products (
     currency VARCHAR(8) CHECK (LOWER(currency) IN ('ron', 'eur')),
     quantity INTEGER CHECK (quantity >= 0),
     weight NUMERIC(10, 2) CHECK (weight >= 0),
-    unit VARCHAR(8) CHECK (LOWER(unit) IN ('g', 'kg', 'ml', 'l')),
-    image_url VARCHAR(512)
+    unit VARCHAR(8) CHECK (LOWER(unit) IN ('g', 'kg', 'ml', 'l'))
 );

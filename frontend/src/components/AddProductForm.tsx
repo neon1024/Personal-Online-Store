@@ -125,7 +125,6 @@ function AddProductForm({
         imageList: ImageListType,
         addUpdateIndex: number[] | undefined
     ) => {
-        // TODO save only the URLs
         setImages(imageList as never[]);
     };
 
