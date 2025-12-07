@@ -9,10 +9,14 @@ import AddProductForm from "./AddProductForm";
 import Product from "../models/Product";
 
 interface AddProductCardProps {
-    addProduct: (product: Product) => Promise<void>;
+    addProduct: (product: Product) => Promise<string>;
+    uploadImages: (
+        images: { file: File; dataURL: string }[],
+        productId: string
+    ) => Promise<void>;
 }
 
-function AddProductCard({ addProduct }: AddProductCardProps) {
+function AddProductCard({ addProduct, uploadImages }: AddProductCardProps) {
     const [addProductFormVisibility, setAddProductFormVisibility] =
         useState(false);
     const toggleAddProductFormVisibility = () => {
@@ -25,6 +29,7 @@ function AddProductCard({ addProduct }: AddProductCardProps) {
         <>
             <AddProductForm
                 addProduct={addProduct}
+                uploadImages={uploadImages}
                 visibility={addProductFormVisibility}
                 toggleVisibility={toggleAddProductFormVisibility}
             />

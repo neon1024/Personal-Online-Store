@@ -59,7 +59,8 @@ function ProductCard({ product, onEdit, onDelete }: ProductCardProps) {
             >
                 {/* Image */}
                 <CardMedia
-                    image={product.getImageUrl()}
+                    // TODO
+                    image={""}
                     title={product.getName()}
                     sx={{
                         height: 150,

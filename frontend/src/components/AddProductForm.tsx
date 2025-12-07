@@ -33,13 +33,18 @@ import { useEffect } from "react";
 import Product from "../models/Product";
 
 interface AddProductFormProps {
-    addProduct: (product: Product) => Promise<void>;
+    addProduct: (product: Product) => Promise<string>;
+    uploadImages: (
+        images: { file: File; dataURL: string }[],
+        productId: string
+    ) => Promise<void>;
     visibility: boolean;
     toggleVisibility: () => void;
 }
 
 function AddProductForm({
     addProduct,
+    uploadImages,
     visibility,
     toggleVisibility,
 }: AddProductFormProps) {
@@ -83,7 +88,7 @@ function AddProductForm({
     const [quantity, setQuantity] = useState("0");
     const [weight, setWeight] = useState("0");
     const [unit, setUnit] = useState("Kg");
-    const [imageUrl, setImageUrl] = useState("");
+    const [images, setImages] = useState<{ file: File; dataURL: string }[]>([]);
 
     useEffect(() => {
         setName("");
@@ -94,13 +99,13 @@ function AddProductForm({
         setQuantity("0");
         setWeight("0");
         setUnit("Kg");
-        setImageUrl("");
+        setImages([]);
     }, [visibility]); // resets all the values whenever the form is opened, meaning that visibility changes
 
     // TODO
     // TODO validate numbers
     async function handleAddProduct() {
-        await addProduct(
+        const productId = await addProduct(
             new Product(
                 "",
                 name,
@@ -110,22 +115,23 @@ function AddProductForm({
                 currency,
                 Number(quantity),
                 Number(weight),
-                unit,
-                imageUrl
+                unit
             )
         );
+
+        // TODO upload images
+        await uploadImages(images, productId);
 
         toggleVisibility();
     }
 
-    const [images, setImages] = useState([]);
-
-    // TODO
-    const handleImageUpload = (
-        imageList: ImageListType,
-        addUpdateIndex: number[] | undefined
-    ) => {
-        setImages(imageList as never[]);
+    const handleImageUpload = (imageList: ImageListType) => {
+        setImages(
+            imageList.map((image) => ({
+                file: image.file as File,
+                dataURL: image.dataURL || "",
+            }))
+        );
     };
 
     return (

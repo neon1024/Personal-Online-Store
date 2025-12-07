@@ -8,7 +8,6 @@ class Product {
     private quantity: number;
     private weight: number;
     private unit: string;
-    private imageUrl: string;
 
     constructor(
         id: string,
@@ -19,8 +18,7 @@ class Product {
         currency: string,
         quantity: number,
         weight: number,
-        unit: string,
-        imageUrl: string
+        unit: string
     ) {
         this.id = id;
         this.name = name;
@@ -31,7 +29,6 @@ class Product {
         this.quantity = quantity;
         this.weight = weight;
         this.unit = unit;
-        this.imageUrl = imageUrl;
     }
 
     public getId(): string {
@@ -104,14 +101,6 @@ class Product {
 
     public setUnit(newUnit: string) {
         this.unit = newUnit;
-    }
-
-    public getImageUrl(): string {
-        return this.imageUrl;
-    }
-
-    public setImageUrl(newImageUrl: string) {
-        this.imageUrl = newImageUrl;
     }
 }
 

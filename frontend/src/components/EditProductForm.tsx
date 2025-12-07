@@ -47,7 +47,7 @@ function EditProductForm({
     const [quantity, setQuantity] = useState<number | string>(0);
     const [weight, setWeight] = useState<number | string>(0);
     const [unit, setUnit] = useState("Kg");
-    const [images, setImages] = useState<{ dataURL: string }[]>([]);
+    const [images, setImages] = useState([]);
 
     useEffect(() => {
         if (product) {
@@ -59,16 +59,14 @@ function EditProductForm({
             setQuantity(product.getQuantity());
             setWeight(product.getWeight());
             setUnit(product.getUnit());
-            setImages(
-                product.getImageUrl()
-                    ? [{ dataURL: product.getImageUrl() }]
-                    : []
-            );
+            // TODO
+            setImages([]);
         }
     }, [product]);
 
+    // TODO
     const handleImageUpload = (imageList: ImageListType) => {
-        setImages(imageList as { dataURL: string }[]);
+        setImages([]);
     };
 
     // TODO validate numbers
@@ -84,8 +82,7 @@ function EditProductForm({
             currency,
             Number(quantity),
             Number(weight),
-            unit,
-            product.getImageUrl()
+            unit
         );
 
         await updateProduct(updatedProduct);

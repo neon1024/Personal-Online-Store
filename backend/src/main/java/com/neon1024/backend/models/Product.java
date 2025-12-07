@@ -39,12 +39,10 @@ public class Product {
     private BigDecimal weight;
     @Pattern(regexp = "(?i)g|kg|ml|l", message = "Unit must be one of g, kg, ml, l")
     private String unit;
-    @Size(max = 512)
-    private String imageUrl;
 
     public Product() {}
 
-    public Product(String name, String category, String description, BigDecimal price, String currency, Integer quantity, BigDecimal weight, String unit, String imageUrl) {
+    public Product(String name, String category, String description, BigDecimal price, String currency, Integer quantity, BigDecimal weight, String unit) {
         this.name = name;
         this.category = category;
         this.description = description;
@@ -53,7 +51,6 @@ public class Product {
         this.quantity = quantity;
         this.weight = weight;
         this.unit = unit;
-        this.imageUrl = imageUrl;
     }
 
     public UUID getId() {
@@ -126,13 +123,5 @@ public class Product {
 
     public void setUnit(String newUnit) {
         this.unit = newUnit;
-    }
-
-    public String getImageUrl() {
-        return imageUrl;
-    }
-
-    public void setImageUrl(String newImageUrl) {
-        this.imageUrl = newImageUrl;
     }
 }

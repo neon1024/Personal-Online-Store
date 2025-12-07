@@ -28,8 +28,6 @@ public class ProductDTO {
     public BigDecimal weight;
     @Pattern(regexp = "(?i)g|kg|ml|l", message = "Unit must be one of g, kg, ml, l")
     public String unit;
-    @Size(max = 512)
-    public String imageUrl;
 
     public ProductDTO() {}
 }

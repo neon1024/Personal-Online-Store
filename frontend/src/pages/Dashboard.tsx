@@ -35,8 +35,7 @@ function Dashboard() {
                     item["currency"],
                     item["quantity"],
                     item["weight"],
-                    item["unit"],
-                    item["imageUrl"]
+                    item["unit"]
                 )
         );
 
@@ -47,7 +46,7 @@ function Dashboard() {
         getProducts();
     }, []);
 
-    async function postProduct(product: Product) {
+    async function postProduct(product: Product): Promise<string> {
         // optimistically update products
         setProducts((prev) => [...prev, product]);
 
@@ -62,6 +61,8 @@ function Dashboard() {
         console.log(data);
 
         await getProducts();
+
+        return data.id;
     }
 
     async function onDeleteProduct(product: Product | null) {
@@ -117,6 +118,11 @@ function Dashboard() {
         await getProducts();
     }
 
+    async function postImages(
+        images: { file: File; dataURL: string }[],
+        productId: string
+    ) {}
+
     return (
         <>
             <NavLink to={"/"}>Back</NavLink>
@@ -132,7 +138,10 @@ function Dashboard() {
                     </Grid>
                 ))}
                 <Grid sx={{ width: 300 }}>
-                    <AddProductCard addProduct={postProduct} />
+                    <AddProductCard
+                        addProduct={postProduct}
+                        uploadImages={postImages}
+                    />
                 </Grid>
             </Grid>
         </>
