@@ -5,6 +5,12 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import com.cloudinary.Cloudinary;
+
+import io.github.cdimascio.dotenv.Dotenv;
+
+import java.util.Map;
+
 @Configuration
 public class WebConfig {
 
@@ -19,9 +25,16 @@ public class WebConfig {
                         .allowedHeaders("*")
                         .allowCredentials(true);
             }
-
-            // TODO Dotenv
-            // TODO Cloudinary
         };
+    }
+
+    @Bean
+    public Dotenv dotenv() {
+        return Dotenv.load();
+    }
+    
+    @Bean
+    public Cloudinary cloudinary(Dotenv dotenv) {
+        return new Cloudinary(dotenv.get("CLOUDINARY_URL"));
     }
 }

@@ -21,28 +21,22 @@ import java.util.List;
 import java.util.UUID;
 import org.springframework.web.bind.annotation.PutMapping;
 
-import com.cloudinary.*;
-import com.cloudinary.utils.ObjectUtils;
-import io.github.cdimascio.dotenv.Dotenv;
-
-import java.util.Map;
+import com.cloudinary.Cloudinary;
 
 @RestController
 @RequestMapping("/products")
 public class ProductsController {
     private ProductsService productsService;
+    private Cloudinary cloudinary;
     
-    public ProductsController(ProductsService productsService) {
+    public ProductsController(ProductsService productsService, Cloudinary cloudinary) {
         this.productsService = productsService;
-
+        this.cloudinary = cloudinary;
     }
 
     @GetMapping("/cloudinary")
     public String getCloudinary() {
-        Dotenv dotenv = Dotenv.load();
-        Cloudinary cloudinary = new Cloudinary(dotenv.get("CLOUDINARY_URL"));
-        
-        return new String(cloudinary.config.cloudName);
+        return this.cloudinary.config.cloudName;
     }
 
     @GetMapping
