@@ -28,9 +28,10 @@ public class WebConfig {
         };
     }
 
+    // TODO don't use dotenv for production
     @Bean
     public Dotenv dotenv() {
-        return Dotenv.load();
+        return Dotenv.configure().ignoreIfMissing().load();
     }
     
     @Bean

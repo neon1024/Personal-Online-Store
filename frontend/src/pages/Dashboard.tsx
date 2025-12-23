@@ -121,7 +121,28 @@ function Dashboard() {
     async function postImages(
         images: { file: File; dataURL: string }[],
         productId: string
-    ) {}
+    ) {
+        if (images.length === 0) return;
+
+        const formData = new FormData();
+        images.forEach((img) => formData.append("images", img.file));
+
+        const response = await fetch(
+            `http://localhost:8080/images/${productId}`,
+            {
+                method: "POST",
+                body: formData, // Content-Type is automatically set to multipart/form-data
+            }
+        );
+
+        if (!response.ok) {
+            throw new Error("Failed to upload images");
+        }
+
+        const data = await response.json();
+
+        console.log(data);
+    }
 
     return (
         <>
