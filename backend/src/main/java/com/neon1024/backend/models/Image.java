@@ -33,8 +33,21 @@ public class Image {
     @Max(value = 7)
     private Integer position;
 
+    public Image() {}
+
+    public Image(Product product, String publicId, String url, Integer position) {
+        this.product = product;
+        this.publicId = publicId;
+        this.url = url;
+        this.position = position;
+    }
+
     public UUID getId() {
         return this.id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
     }
 
     public Product getProduct() {

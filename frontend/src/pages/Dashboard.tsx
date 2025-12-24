@@ -11,8 +11,12 @@ import { useState } from "react";
 
 import { useEffect } from "react";
 
+import Image from "../models/Image";
+
 function Dashboard() {
     const [products, setProducts] = useState<Product[]>([]);
+
+    // TODO make controllers
 
     async function getProducts() {
         const response = await fetch(`http://localhost:8080/products`, {
@@ -142,6 +146,37 @@ function Dashboard() {
         const data = await response.json();
 
         console.log(data);
+    }
+
+    async function getImagesByProductId(productId: string) {
+        const response = await fetch(
+            `http://localhost:8080/images/${productId}`,
+            {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            }
+        );
+
+        if (!response) {
+            throw new Error("Failed retrieving the images");
+        }
+
+        const data = await response.json();
+
+        const images: Image[] = data.forEach(
+            (item: Image) =>
+                new Image(
+                    item.getId(),
+                    productId,
+                    item.getPublicId(),
+                    item.getUrl(),
+                    item.getPosition()
+                )
+        );
+
+        console.log(images);
     }
 
     return (

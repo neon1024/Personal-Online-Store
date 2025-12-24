@@ -15,6 +15,13 @@ import com.neon1024.backend.services.ImagesService;
 import java.util.List;
 import java.util.ArrayList;
 
+import java.util.UUID;
+
+import com.neon1024.backend.models.Image;
+import com.neon1024.backend.models.ImageDTO;
+
+import java.util.Map;
+
 @RestController
 @RequestMapping("/images")
 public class ImagesController {
@@ -26,19 +33,21 @@ public class ImagesController {
 
     // TODO rename methods
 
-    @GetMapping
-    public ResponseEntity<List<String>> getImages() {
-        List<String> fetchedImages = this.imagesService.getAllImages();
-        return ResponseEntity.status(200).body(fetchedImages);
+    @GetMapping("/{id}")
+    public ResponseEntity<List<ImageDTO>> getImages(@PathVariable("id") UUID id) {
+        List<ImageDTO> fetchedImagesDTOs = this.imagesService.getAllImagesByProductId(id);
+        
+        return ResponseEntity.status(200).body(fetchedImagesDTOs);
     }
 
     @PostMapping("/{id}")
-    public ResponseEntity<Void> postImages(@RequestParam("images") MultipartFile[] images, @PathVariable("id") String productId) {
-        // TODO: handle Cloudinary upload here
+    public ResponseEntity<Map> postImages(@RequestParam("images") MultipartFile[] images, @PathVariable("id") UUID id) {
+        List<Image> uploadedImages = new ArrayList<Image>();
+
         for (MultipartFile image : images) {
-            this.imagesService.uploadImage(image);            
+            uploadedImages.add(imagesService.uploadImage(image, id));            
         }
 
-        return ResponseEntity.status(201).build();
+        return ResponseEntity.status(201).body(Map.of("OK", "Images upload successful"));
     }
 }
