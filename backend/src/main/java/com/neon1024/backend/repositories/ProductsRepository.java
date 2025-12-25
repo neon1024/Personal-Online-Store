@@ -23,8 +23,7 @@ public interface ProductsRepository extends JpaRepository<Product, UUID> {
         "p.currency = COALESCE(:currency, p.currency), " +
         "p.quantity = COALESCE(:quantity, p.quantity), " +
         "p.weight = COALESCE(:weight, p.weight), " +
-        "p.unit = COALESCE(:unit, p.unit), " +
-        "p.imageUrl = COALESCE(:imageUrl, p.imageUrl) " +
+        "p.unit = COALESCE(:unit, p.unit) " +
         "WHERE p.id = :id"
     )
     public int updateById(
@@ -36,7 +35,6 @@ public interface ProductsRepository extends JpaRepository<Product, UUID> {
         @Param("currency") String currency,
         @Param("quantity") Integer quantity,
         @Param("weight") BigDecimal weight,
-        @Param("unit") String unit,
-        @Param("imageUrl") String imageUrl
+        @Param("unit") String unit
     );
 }

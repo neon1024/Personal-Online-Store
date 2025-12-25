@@ -14,6 +14,8 @@ import java.util.UUID;
 
 import java.util.List;
 
+import java.util.Optional;
+
 @Service
 @Transactional
 public class ProductsService {
@@ -27,8 +29,12 @@ public class ProductsService {
         return productsRepository.findAll();
     }
 
+    public Optional<Product> getProductById(UUID id) {
+        return this.productsRepository.findById(id);
+    }
+
     public Product addProduct(ProductDTO dto) {
-        Product product = new Product(dto.name, dto.category, dto.description, dto.price, dto.currency, dto.quantity, dto.weight, dto.unit, dto.imageUrl);
+        Product product = new Product(dto.name, dto.category, dto.description, dto.price, dto.currency, dto.quantity, dto.weight, dto.unit);
         this.productsRepository.save(product);
         return product;
     }
@@ -41,7 +47,7 @@ public class ProductsService {
         int numberOfAffectedRows = this.productsRepository.updateById(
             id,
             dto.name,
-            dto.category, dto.description, dto.price, dto.currency, dto.quantity, dto.weight, dto.unit, dto.imageUrl
+            dto.category, dto.description, dto.price, dto.currency, dto.quantity, dto.weight, dto.unit
         );
 
         return numberOfAffectedRows;

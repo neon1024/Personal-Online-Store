@@ -23,6 +23,10 @@ import org.springframework.web.bind.annotation.PutMapping;
 
 import com.cloudinary.Cloudinary;
 
+import java.util.Map;
+
+import java.util.Optional;
+
 @RestController
 @RequestMapping("/products")
 public class ProductsController {
@@ -40,9 +44,20 @@ public class ProductsController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Product>> getProducts() {
+    public ResponseEntity<List<Product>> getAllProducts() {
         List<Product> fetchedProducts = productsService.getAllProducts();
         return ResponseEntity.status(200).body(fetchedProducts);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getProductById(@PathVariable UUID id) {
+        Optional<Product> fetchedProduct = this.productsService.getProductById(id);
+        
+        if(fetchedProduct.isEmpty()) {
+            return ResponseEntity.status(404).body(Map.of("Error", "Product not found"));
+        }
+
+        return ResponseEntity.status(200).body(fetchedProduct);
     }
 
     @PostMapping

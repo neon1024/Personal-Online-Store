@@ -1,6 +1,7 @@
 package com.neon1024.backend.services;
 
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException.NotFound;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -17,6 +18,8 @@ import jakarta.transaction.Transactional;
 import com.neon1024.backend.models.Product;
 import com.neon1024.backend.models.Image;
 import com.neon1024.backend.models.ImageDTO;
+
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -37,6 +40,12 @@ public class ImagesService {
     }
 
     public List<ImageDTO> getAllImagesByProductId(UUID id) {
+        Optional<Product> product = this.productsRepository.findById(id);
+
+        if(product.isEmpty()) {
+            throw new RuntimeException("Product doesn't exist");
+        }
+
         List<Image> images = this.imagesRepository.findAllImagesByProductId(id);
 
         List<ImageDTO> imagesDTOs = images.stream().map(
@@ -78,5 +87,45 @@ public class ImagesService {
         }
     }
 
-    // TODO method for uploading multiple images at once, also set their position
+    public Integer uploadAllImagesForProductId(MultipartFile[] images, UUID id) {
+        Integer uploadedImagesCount = 0;
+        Integer position = 0;
+        final Integer POSITION_LIMIT = 8;
+
+        for(MultipartFile image : images) {
+            try {
+            Map uploadResult = this.cloudinary.uploader().upload(
+                image.getBytes(),
+                ObjectUtils.asMap(
+                    "folder", "Products/Images",
+                    "resource_type", "image"
+                ));
+
+            Product product = this.productsRepository.getReferenceById(id);
+
+            String publicId = uploadResult.get("public_id").toString();
+
+            String url = uploadResult.get("secure_url").toString();
+
+            position = position++ % POSITION_LIMIT;
+
+            Image imageToSave = new Image(product, publicId, url, position);
+
+            this.imagesRepository.save(imageToSave);
+
+            uploadedImagesCount++;
+
+            } catch(Exception e) {
+                throw new RuntimeException("Failed to upload an image", e);
+            }
+        }
+
+        return uploadedImagesCount;
+    }
+
+    public Integer deleteImagesByProductId(UUID id) {
+        Integer deletedImagesCount = 0;
+
+        return deletedImagesCount;
+    }
 }
