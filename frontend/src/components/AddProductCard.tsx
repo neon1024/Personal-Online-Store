@@ -19,12 +19,15 @@ interface AddProductCardProps {
 function AddProductCard({ addProduct, uploadImages }: AddProductCardProps) {
     const [addProductFormVisibility, setAddProductFormVisibility] =
         useState(false);
+
     const toggleAddProductFormVisibility = () => {
         setAddProductFormVisibility((prev) => !prev);
     };
+
     const handleAddProduct = () => {
         toggleAddProductFormVisibility();
     };
+
     return (
         <>
             <AddProductForm

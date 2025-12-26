@@ -16,6 +16,6 @@ public interface ImagesRepository extends JpaRepository<Image, UUID> {
     JOIN FETCH i.product
     WHERE i.product.id = :id
     """)
-    public List<Image> findAllImagesByProductId(UUID id);
+    public List<Image> findAllImagesOfProductByProductId(UUID id);
 
 }

@@ -23,8 +23,6 @@ import java.util.Map;
 
 import org.springframework.http.MediaType;
 
-import java.util.ArrayList;
-
 @RestController
 @RequestMapping("/images")
 public class ImagesController {

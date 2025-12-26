@@ -48,7 +48,7 @@ function ProductCard({
 
             console.log(fetchedImages);
 
-            setImages((prev) => fetchedImages);
+            setImages([...fetchedImages]);
         };
 
         fetchImages();
@@ -82,7 +82,7 @@ function ProductCard({
             >
                 {/* Image */}
                 <CardMedia
-                    // TODO
+                    // TODO fix image not shown on product creation
                     image={images.length ? images[0].getUrl() : ""}
                     title={product.getName()}
                     sx={{

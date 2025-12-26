@@ -37,7 +37,7 @@ public class ImagesService {
             throw new RuntimeException("Product doesn't exist");
         }
 
-        List<Image> images = this.imagesRepository.findAllImagesByProductId(id);
+        List<Image> images = this.imagesRepository.findAllImagesOfProductByProductId(id);
 
         List<ImageDTO> imagesDTOs = images.stream()
             .map(
@@ -123,7 +123,6 @@ public class ImagesService {
         return uploadedImagesCount;
     }
 
-    // TODO
     public Integer deleteImagesOfProductByProductId(UUID id, List<ImageDTO> imageDTOs) {
         if(!this.productsRepository.existsById(id)) {
             throw new RuntimeException("Product doesn't exist");
