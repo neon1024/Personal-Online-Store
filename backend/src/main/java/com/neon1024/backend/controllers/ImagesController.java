@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
-
+import com.neon1024.backend.repositories.ProductsRepository;
 import com.neon1024.backend.services.ImagesService;
 
 import java.util.List;
@@ -27,39 +27,61 @@ import java.util.ArrayList;
 @RestController
 @RequestMapping("/images")
 public class ImagesController {
-    private ImagesService imagesService;
+    private final ImagesService imagesService;
+    private final ProductsRepository productsRepository;
 
-    public ImagesController(ImagesService imagesService) {
+    public ImagesController(ImagesService imagesService, ProductsRepository productsRepository) {
         this.imagesService = imagesService;
+        this.productsRepository = productsRepository;
     }
 
+    // get all images for a product by product id
     @GetMapping("/{id}")
-    public ResponseEntity<List<ImageDTO>> getAllByProductId(@PathVariable("id") UUID id) {
-        List<ImageDTO> fetchedImagesDTOs = this.imagesService.getAllImagesByProductId(id);
+    public ResponseEntity<?> getAllImagesOfProductByProductId(@PathVariable UUID id) {
+        if(!this.productsRepository.existsById(id)) {
+            return ResponseEntity.status(404).body(Map.of("Error", "Product doesn't exist"));
+        }
+
+        try {
+            List<ImageDTO> fetchedImagesDTOs = this.imagesService.getAllImagesOfProductByProductId(id);
         
-        return ResponseEntity.status(200).body(fetchedImagesDTOs);
+            return ResponseEntity.status(200).body(fetchedImagesDTOs);
+
+        } catch(Exception e) {
+            return ResponseEntity.badRequest().body(Map.of("Error", e.getMessage()));
+        }
     }
 
+    // add images for a product by product id
     @PostMapping(
         value = "/{id}",
         consumes = MediaType.MULTIPART_FORM_DATA_VALUE
     )
-    public ResponseEntity<?> addAllByProductId(
+    public ResponseEntity<?> addAllImagesForProductByProductId(
         @RequestParam("images") MultipartFile[] images,
-        @PathVariable("id") UUID id
+        @PathVariable UUID id
     ) {
-        Integer uploadedImagesCount = this.imagesService.uploadAllImagesForProductId(images, id);
-
-        if(uploadedImagesCount != images.length) {
-            return ResponseEntity.status(500).body(Map.of("Error", "Upload failed"));
+        if(!this.productsRepository.existsById(id)) {
+            return ResponseEntity.status(404).body(Map.of("Error", "Product doesn't exist"));
         }
 
-        return ResponseEntity.status(201).body(Map.of("OK", uploadedImagesCount + " Images uploaded successfully"));
+        try {
+            Integer uploadedImagesCount = this.imagesService.uploadAllImagesForProductByProductId(images, id);
+
+            if(uploadedImagesCount != images.length) {
+                return ResponseEntity.status(500).body(Map.of("Error", "Upload failed"));
+            }
+
+            return ResponseEntity.status(201).body(Map.of("OK", uploadedImagesCount + " Images uploaded successfully"));
+
+        } catch(Exception e) {
+            return ResponseEntity.badRequest().body(Map.of("Error", e.getMessage()));
+        }
     }
 
-    // TODO provide public ids
+    // delete images for a product by product id
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteImagesByProductId(@PathVariable UUID id) {
+    public ResponseEntity<?> deleteImagesOfProductByProductId(@PathVariable UUID id) {
         Integer deletedImagesCount = this.imagesService.deleteImagesByProductId(id);
 
         return ResponseEntity.status(200).body(deletedImagesCount + " Images deleted successfuly");

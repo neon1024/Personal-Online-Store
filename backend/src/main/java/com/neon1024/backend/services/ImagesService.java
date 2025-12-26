@@ -27,38 +27,39 @@ public class ImagesService {
     // TODO Singleton?
     private ProductsRepository productsRepository;
     private Cloudinary cloudinary;
-    private Integer position;
-    private final Integer POSITION_LIMIT;
 
     public ImagesService(ImagesRepository imagesRepository, ProductsRepository productsRepository, Cloudinary cloudinary) {
         this.imagesRepository = imagesRepository;
         this.productsRepository = productsRepository;
         this.cloudinary = cloudinary;
-        this.position = 0;
-        this.POSITION_LIMIT = 8;
     }
 
-    public List<ImageDTO> getAllImagesByProductId(UUID id) {
-        Optional<Product> product = this.productsRepository.findById(id);
-
-        if(product.isEmpty()) {
+    public List<ImageDTO> getAllImagesOfProductByProductId(UUID id) {
+        if(!this.productsRepository.existsById(id)) {
             throw new RuntimeException("Product doesn't exist");
         }
 
         List<Image> images = this.imagesRepository.findAllImagesByProductId(id);
 
-        List<ImageDTO> imagesDTOs = images.stream().map(
-            image -> new ImageDTO(
-                image.getId(),
-                id,
-                image.getPublicId(),
-                image.getUrl(),
-                image.getPosition())).toList();
+        List<ImageDTO> imagesDTOs = images.stream()
+            .map(
+                image -> new ImageDTO(
+                    image.getId(),
+                    id,
+                    image.getPublicId(),
+                    image.getUrl(),
+                    image.getPosition()
+                )
+            ).toList();
         
         return imagesDTOs;
     }
 
-    public Image uploadImage(MultipartFile image, UUID productId) {
+    public Image uploadOneImageForProductByProductId(MultipartFile image, UUID productId, Integer position) {
+        if(!this.productsRepository.existsById(productId)) {
+            throw new RuntimeException("Product doesn't exist");
+        }
+
         try {
             Map uploadResult = this.cloudinary.uploader().upload(
                 image.getBytes(),
@@ -73,19 +74,22 @@ public class ImagesService {
 
             String url = uploadResult.get("secure_url").toString();
 
-            Integer position = this.position++ % this.POSITION_LIMIT;
-
             Image imageToSave = new Image(product, publicId, url, position);
 
             this.imagesRepository.save(imageToSave);
 
             return imageToSave;
+
         } catch(Exception e) {
-            throw new RuntimeException("Image uploading failed", e);
+            throw new RuntimeException("Failed to upload image", e);
         }
     }
 
-    public Integer uploadAllImagesForProductId(MultipartFile[] images, UUID id) {
+    public Integer uploadAllImagesForProductByProductId(MultipartFile[] images, UUID id) {
+        if(!this.productsRepository.existsById(id)) {
+            throw new RuntimeException("Product doesn't exist");
+        }
+
         Integer uploadedImagesCount = 0;
         Integer position = 0;
         final Integer POSITION_LIMIT = 8;
@@ -94,24 +98,24 @@ public class ImagesService {
 
         for(MultipartFile image : images) {
             try {
-            Map uploadResult = this.cloudinary.uploader().upload(
-                image.getBytes(),
-                ObjectUtils.asMap(
-                    "folder", "Products/Images",
-                    "resource_type", "image"
-                ));
+                Map uploadResult = this.cloudinary.uploader().upload(
+                    image.getBytes(),
+                    ObjectUtils.asMap(
+                        "folder", "Products/Images",
+                        "resource_type", "image"
+                    ));
 
-            String publicId = uploadResult.get("public_id").toString();
+                String publicId = uploadResult.get("public_id").toString();
 
-            String url = uploadResult.get("secure_url").toString();
+                String url = uploadResult.get("secure_url").toString();
 
-            Image imageToSave = new Image(product, publicId, url, position);
+                Image imageToSave = new Image(product, publicId, url, position);
 
-            position = (position + 1) % POSITION_LIMIT;
+                position = (position + 1) % POSITION_LIMIT;
 
-            this.imagesRepository.save(imageToSave);
+                this.imagesRepository.save(imageToSave);
 
-            uploadedImagesCount++;
+                uploadedImagesCount++;
 
             } catch(Exception e) {
                 throw new RuntimeException("Failed to upload an image", e);
