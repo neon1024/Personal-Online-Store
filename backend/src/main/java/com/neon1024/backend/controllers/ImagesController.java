@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.multipart.MultipartFile;
 import com.neon1024.backend.repositories.ProductsRepository;
 import com.neon1024.backend.services.ImagesService;
@@ -81,9 +82,21 @@ public class ImagesController {
 
     // delete images for a product by product id
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteImagesOfProductByProductId(@PathVariable UUID id) {
-        Integer deletedImagesCount = this.imagesService.deleteImagesByProductId(id);
+    public ResponseEntity<?> deleteImagesOfProductByProductId(
+        @PathVariable UUID id,
+        @RequestBody List<ImageDTO> imageDTOs
+    ) {
+        if(!this.productsRepository.existsById(id)) {
+            return ResponseEntity.status(404).body(Map.of("Error", "Product doesn't exist"));
+        }
 
-        return ResponseEntity.status(200).body(deletedImagesCount + " Images deleted successfuly");
+        try {
+            Integer deletedImagesCount = this.imagesService.deleteImagesOfProductByProductId(id, imageDTOs);
+
+            return ResponseEntity.status(200).body(deletedImagesCount + " Images deleted successfuly");
+        
+        } catch(Exception e) {
+            return ResponseEntity.badRequest().body(Map.of("Error", e.getMessage()));
+        }
     }
 }

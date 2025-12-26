@@ -18,8 +18,6 @@ import com.neon1024.backend.models.Product;
 import com.neon1024.backend.models.Image;
 import com.neon1024.backend.models.ImageDTO;
 
-import java.util.Optional;
-
 @Service
 @Transactional
 public class ImagesService {
@@ -81,7 +79,7 @@ public class ImagesService {
             return imageToSave;
 
         } catch(Exception e) {
-            throw new RuntimeException("Failed to upload image", e);
+            throw new RuntimeException("Failed to upload the image", e);
         }
     }
 
@@ -118,17 +116,44 @@ public class ImagesService {
                 uploadedImagesCount++;
 
             } catch(Exception e) {
-                throw new RuntimeException("Failed to upload an image", e);
+                throw new RuntimeException("Failed to upload all images", e);
             }
         }
 
         return uploadedImagesCount;
     }
 
-    public Integer deleteImagesByProductId(UUID id) {
+    // TODO
+    public Integer deleteImagesOfProductByProductId(UUID id, List<ImageDTO> imageDTOs) {
+        if(!this.productsRepository.existsById(id)) {
+            throw new RuntimeException("Product doesn't exist");
+        }
+
         Integer deletedImagesCount = 0;
 
-        // TODO
+        try {
+            for(ImageDTO imageDTO : imageDTOs) {
+                Map destroyResult = this.cloudinary.uploader()
+                    .destroy(
+                        imageDTO.getPublicId(),
+                        ObjectUtils.asMap(
+                            "folder", "Products/Images",
+                        "resource_type", "image"
+                        )
+                    );
+                
+                this.imagesRepository.deleteById(imageDTO.getId());
+                
+                deletedImagesCount++;
+            }
+
+        } catch(Exception e) {
+            throw new RuntimeException(e.getMessage());
+        }
+
+        if(deletedImagesCount != imageDTOs.size()) {
+            throw new RuntimeException("Failed to delete all images");
+        }
 
         return deletedImagesCount;
     }
