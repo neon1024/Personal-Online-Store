@@ -1,7 +1,6 @@
 package com.neon1024.backend.services;
 
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpClientErrorException.NotFound;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -59,7 +58,6 @@ public class ImagesService {
         return imagesDTOs;
     }
 
-    // TODO upload an image to Cloudinary
     public Image uploadImage(MultipartFile image, UUID productId) {
         try {
             Map uploadResult = this.cloudinary.uploader().upload(
@@ -92,6 +90,8 @@ public class ImagesService {
         Integer position = 0;
         final Integer POSITION_LIMIT = 8;
 
+        Product product = this.productsRepository.getReferenceById(id);
+
         for(MultipartFile image : images) {
             try {
             Map uploadResult = this.cloudinary.uploader().upload(
@@ -101,15 +101,13 @@ public class ImagesService {
                     "resource_type", "image"
                 ));
 
-            Product product = this.productsRepository.getReferenceById(id);
-
             String publicId = uploadResult.get("public_id").toString();
 
             String url = uploadResult.get("secure_url").toString();
 
-            position = position++ % POSITION_LIMIT;
-
             Image imageToSave = new Image(product, publicId, url, position);
+
+            position = (position + 1) % POSITION_LIMIT;
 
             this.imagesRepository.save(imageToSave);
 
@@ -125,6 +123,8 @@ public class ImagesService {
 
     public Integer deleteImagesByProductId(UUID id) {
         Integer deletedImagesCount = 0;
+
+        // TODO
 
         return deletedImagesCount;
     }

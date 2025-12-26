@@ -13,16 +13,24 @@ import {
 
 import Product from "../models/Product";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import EditProductForm from "./EditProductForm";
+
+import Image from "../models/Image";
 
 interface ProductCardProps {
     product: Product | null;
     onEdit: (product: Product | null) => Promise<void>;
     onDelete: (product: Product | null) => Promise<void>;
+    onGetImages: (id: string) => Promise<Image[]>;
 }
 
-function ProductCard({ product, onEdit, onDelete }: ProductCardProps) {
+function ProductCard({
+    product,
+    onEdit,
+    onDelete,
+    onGetImages,
+}: ProductCardProps) {
     const [editProductFormVisibility, setEditProductFormVisibility] =
         useState(false);
 
@@ -32,6 +40,20 @@ function ProductCard({ product, onEdit, onDelete }: ProductCardProps) {
 
     if (!product) return null;
 
+    const [images, setImages] = useState<Image[]>([]);
+
+    useEffect(() => {
+        const fetchImages = async () => {
+            const fetchedImages = await onGetImages(product.getId());
+
+            console.log(fetchedImages);
+
+            setImages((prev) => fetchedImages);
+        };
+
+        fetchImages();
+    }, [product, onGetImages]);
+
     return (
         <>
             <EditProductForm
@@ -39,6 +61,7 @@ function ProductCard({ product, onEdit, onDelete }: ProductCardProps) {
                 updateProduct={onEdit}
                 visibility={editProductFormVisibility}
                 toggleVisibility={toggleEditProductFormVisibility}
+                // TODO on get images
             />
             <Card
                 variant="outlined"
@@ -60,7 +83,7 @@ function ProductCard({ product, onEdit, onDelete }: ProductCardProps) {
                 {/* Image */}
                 <CardMedia
                     // TODO
-                    image={""}
+                    image={images.length ? images[0].getUrl() : ""}
                     title={product.getName()}
                     sx={{
                         height: 150,

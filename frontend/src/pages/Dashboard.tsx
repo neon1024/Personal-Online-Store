@@ -165,18 +165,20 @@ function Dashboard() {
 
         const data = await response.json();
 
-        const images: Image[] = data.forEach(
-            (item: Image) =>
+        data.forEach((item: any) => console.log(item));
+
+        const images: Image[] = data.map(
+            (item: any) =>
                 new Image(
-                    item.getId(),
+                    item.id,
                     productId,
-                    item.getPublicId(),
-                    item.getUrl(),
-                    item.getPosition()
+                    item.publicId,
+                    item.url,
+                    item.position
                 )
         );
 
-        console.log(images);
+        return images;
     }
 
     return (
@@ -190,6 +192,7 @@ function Dashboard() {
                             product={product}
                             onEdit={updateProduct}
                             onDelete={onDeleteProduct}
+                            onGetImages={getImagesByProductId}
                         />
                     </Grid>
                 ))}

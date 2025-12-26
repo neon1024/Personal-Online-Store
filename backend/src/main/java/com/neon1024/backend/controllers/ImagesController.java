@@ -20,6 +20,10 @@ import com.neon1024.backend.models.ImageDTO;
 
 import java.util.Map;
 
+import org.springframework.http.MediaType;
+
+import java.util.ArrayList;
+
 @RestController
 @RequestMapping("/images")
 public class ImagesController {
@@ -36,8 +40,14 @@ public class ImagesController {
         return ResponseEntity.status(200).body(fetchedImagesDTOs);
     }
 
-    @PostMapping("/{id}")
-    public ResponseEntity<?> addAllByProductId(@RequestParam("images") MultipartFile[] images, @PathVariable("id") UUID id) {
+    @PostMapping(
+        value = "/{id}",
+        consumes = MediaType.MULTIPART_FORM_DATA_VALUE
+    )
+    public ResponseEntity<?> addAllByProductId(
+        @RequestParam("images") MultipartFile[] images,
+        @PathVariable("id") UUID id
+    ) {
         Integer uploadedImagesCount = this.imagesService.uploadAllImagesForProductId(images, id);
 
         if(uploadedImagesCount != images.length) {
