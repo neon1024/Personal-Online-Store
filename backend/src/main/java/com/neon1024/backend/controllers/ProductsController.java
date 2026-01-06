@@ -66,6 +66,7 @@ public class ProductsController {
         return ResponseEntity.status(201).body(addedProduct);
     }
     
+    // TODO also delete images from cloudinary
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteProduct(@PathVariable UUID id) {
         this.productsService.deleteProductById(id);
