@@ -108,7 +108,7 @@ And backend API on:
 
 http://localhost:8080
 
-## SonarQube
+## 🔍 SonarQube
 
 ### ⚙️ Backend
 
