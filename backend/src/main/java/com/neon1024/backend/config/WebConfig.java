@@ -9,8 +9,6 @@ import com.cloudinary.Cloudinary;
 
 import io.github.cdimascio.dotenv.Dotenv;
 
-import java.util.Map;
-
 @Configuration
 public class WebConfig {
 

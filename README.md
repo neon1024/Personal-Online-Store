@@ -23,6 +23,7 @@ Clean separation of concerns between client and server
 The codebase illustrates how a real production system should be structured — not just a quick demo or tutorial clone.
 
 ## ✨ Key Features
+
 ### 🔐 Role-Based Access Control & Admin Dashboard
 
 Secure registration and login flows, fully managed by backend APIs.
@@ -46,6 +47,7 @@ Frontend communicates exclusively with backend RESTful APIs for all data and sta
 All product, user, and order data is stored in PostgreSQL, ensuring data integrity and reliability.
 
 ## 🛠️ Tech Stack
+
 ### Backend
 
 - Spring Boot
@@ -71,6 +73,7 @@ All product, user, and order data is stored in PostgreSQL, ensuring data integri
 - Vite
 
 ## ⚙️ Setup & Installation
+
 ### 🧩 Prerequisites
 
 - Java 17+
@@ -84,12 +87,15 @@ All product, user, and order data is stored in PostgreSQL, ensuring data integri
 - PostgreSQL
 
 ### 📌 Backend Setup (Spring Boot)
+
 `cd backend`<br>
 `mvn clean install`<br>
+
 - Configure database connection in application.properties
-`mvn spring-boot:run`<br>
+  `mvn spring-boot:run`<br>
 
 ### 📌 Frontend Setup (React)
+
 `cd frontend`<br>
 `npm install`<br>
 `npx vite`<br>
@@ -101,6 +107,16 @@ http://localhost:3000
 And backend API on:
 
 http://localhost:8080
+
+## SonarQube
+
+### ⚙️ Backend
+
+- Running analysis
+
+```
+mvn clean verify "org.sonarsource.scanner.maven:sonar-maven-plugin:sonar" "-Dsonar.projectKey=Personal-Online-Store" "-Dsonar.host.url=http://localhost:9000" "-Dsonar.token=<YOUR_TOKEN>" "-Dsonar.verbose=true"
+```
 
 ## 🛠️ Future Improvements
 
