@@ -111,7 +111,7 @@ function AddProductForm({
 
         let isValid = true;
 
-        if (isNaN(parsedPrice) || parsedPrice <= 0) {
+        if (Number.isNaN(parsedPrice) || parsedPrice <= 0) {
             isValid = false;
             alert("Price must be a valid positive number.");
         }
@@ -121,7 +121,7 @@ function AddProductForm({
             alert("Quantity must be a valid non-negative integer.");
         }
 
-        if (isNaN(parsedWeight) || parsedWeight <= 0) {
+        if (Number.isNaN(parsedWeight) || parsedWeight <= 0) {
             isValid = false;
             alert("Weight must be a valid positive number.");
         }

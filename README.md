@@ -141,7 +141,7 @@ npm install -g @sonar/scan
 - Run analysis
 
 ```
-sonar "-Dsonar.host.url=http://localhost:9000" "-Dsonar token=<YOUR_TOKEN>" "-Dsonar.projectKey=frontend"
+sonar "-Dsonar.host.url=http://localhost:9000" "-Dsonar.token=<YOUR_TOKEN>" "-Dsonar.projectKey=frontend"
 ```
 
 ## 🛠️ Future Improvements
