@@ -9,10 +9,10 @@ import AddProductForm from "./AddProductForm";
 import Product from "../models/Product";
 
 interface AddProductCardProps {
-    addProduct: (product: Product) => Promise<string>;
-    uploadImages: (
+    readonly addProduct: (product: Product) => Promise<string>;
+    readonly uploadImages: (
         images: { file: File; dataURL: string }[],
-        productId: string
+        productId: string,
     ) => Promise<void>;
 }
 

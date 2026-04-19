@@ -7,9 +7,7 @@ import ProductCard from "../components/ProductCard";
 import AddProductCard from "../components/AddProductCard";
 import Product from "../models/Product";
 
-import { useState } from "react";
-
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 import Image from "../models/Image";
 
@@ -39,8 +37,8 @@ function Dashboard() {
                     item["currency"],
                     item["quantity"],
                     item["weight"],
-                    item["unit"]
-                )
+                    item["unit"],
+                ),
         );
 
         setProducts(products);
@@ -74,13 +72,13 @@ function Dashboard() {
 
         // Remove from UI immediately
         setProducts((prev) =>
-            prev.filter((p) => p.getId() !== product.getId())
+            prev.filter((p) => p.getId() !== product.getId()),
         );
 
         // Then delete on backend
         const response = await fetch(
             `http://localhost:8080/products/${product.getId()}`,
-            { method: "DELETE" }
+            { method: "DELETE" },
         );
 
         const data = await response.json();
@@ -100,7 +98,7 @@ function Dashboard() {
 
         // optimistically update UI
         setProducts((prev) =>
-            prev.map((p) => (p.getId() === product.getId() ? product : p))
+            prev.map((p) => (p.getId() === product.getId() ? product : p)),
         );
 
         // update on backend
@@ -112,7 +110,7 @@ function Dashboard() {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify(product),
-            }
+            },
         );
 
         const data = await response.json();
@@ -124,7 +122,7 @@ function Dashboard() {
 
     async function postImages(
         images: { file: File; dataURL: string }[],
-        productId: string
+        productId: string,
     ) {
         if (images.length === 0) return;
 
@@ -136,7 +134,7 @@ function Dashboard() {
             {
                 method: "POST",
                 body: formData, // Content-Type is automatically set to multipart/form-data
-            }
+            },
         );
 
         if (!response.ok) {
@@ -156,7 +154,7 @@ function Dashboard() {
                 headers: {
                     "Content-Type": "application/json",
                 },
-            }
+            },
         );
 
         if (!response) {
@@ -172,8 +170,8 @@ function Dashboard() {
                     productId,
                     item.publicId,
                     item.url,
-                    item.position
-                )
+                    item.position,
+                ),
         );
 
         return images;
