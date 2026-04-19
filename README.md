@@ -112,10 +112,36 @@ http://localhost:8080
 
 ### ⚙️ Backend
 
-- Running analysis
+- Navigate to
 
 ```
-mvn clean verify "org.sonarsource.scanner.maven:sonar-maven-plugin:sonar" "-Dsonar.projectKey=Personal-Online-Store" "-Dsonar.host.url=http://localhost:9000" "-Dsonar.token=<YOUR_TOKEN>" "-Dsonar.verbose=true"
+cd .\backend\
+```
+
+- Run analysis
+
+```
+mvn clean verify "org.sonarsource.scanner.maven:sonar-maven-plugin:sonar" "-Dsonar.projectKey=Personal-Online-Store" "-Dsonar.host.url=http://localhost:9000" "-Dsonar.token=<YOUR_TOKEN>"
+```
+
+### ⚙️ Frontend
+
+- Navigate to
+
+```
+cd .\frontend\
+```
+
+- Install SonarQube
+
+```
+npm install -g @sonar/scan
+```
+
+- Run analysis
+
+```
+sonar "-Dsonar.host.url=http://localhost:9000" "-Dsonar token=<YOUR_TOKEN>" "-Dsonar.projectKey=frontend"
 ```
 
 ## 🛠️ Future Improvements
