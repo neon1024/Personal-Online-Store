@@ -1,13 +1,12 @@
 package com.neon1024.backend.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import com.cloudinary.Cloudinary;
-
-import io.github.cdimascio.dotenv.Dotenv;
 
 @Configuration
 public class WebConfig {
@@ -26,14 +25,11 @@ public class WebConfig {
         };
     }
 
-    // TODO don't use dotenv for production
+    @Value("${cloudinary.url}")
+    private String cloudinaryUrl;
+
     @Bean
-    public Dotenv dotenv() {
-        return Dotenv.configure().ignoreIfMissing().load();
-    }
-    
-    @Bean
-    public Cloudinary cloudinary(Dotenv dotenv) {
-        return new Cloudinary(dotenv.get("CLOUDINARY_URL"));
+    public Cloudinary cloudinary() {
+        return new Cloudinary(cloudinaryUrl);
     }
 }

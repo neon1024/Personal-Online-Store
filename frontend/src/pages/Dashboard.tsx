@@ -9,6 +9,7 @@ import Product from "../models/Product";
 
 import { useEffect, useState } from "react";
 
+import type { ApiResponse } from "../common/ApiResponse";
 import Image from "../models/Image";
 
 function Dashboard() {
@@ -137,13 +138,13 @@ function Dashboard() {
             },
         );
 
-        if (!response.ok) {
-            throw new Error("Failed to upload images");
+        const result: ApiResponse<number> = await response.json();
+
+        if (!result.success) {
+            throw new Error(result.error ?? "Failed to upload images");
         }
 
-        const data = await response.json();
-
-        console.log(data);
+        console.log(result.data);
     }
 
     async function getImagesByProductId(productId: string) {
@@ -151,17 +152,20 @@ function Dashboard() {
             `http://localhost:8080/images/${productId}`,
             {
                 method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                },
             },
         );
 
-        if (!response) {
-            throw new Error("Failed retrieving the images");
+        const result: ApiResponse<Image[]> = await response.json();
+
+        if (!result.success) {
+            throw new Error(result.error ?? "Failed retrieving the images");
         }
 
-        const data = await response.json();
+        if (!result.data) {
+            return [];
+        }
+
+        const data = result.data;
 
         const images: Image[] = data.map(
             (item: any) =>

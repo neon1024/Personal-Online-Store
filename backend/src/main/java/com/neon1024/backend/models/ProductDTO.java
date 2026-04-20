@@ -29,5 +29,7 @@ public class ProductDTO {
     @Pattern(regexp = "(?i)g|kg|ml|l", message = "Unit must be one of g, kg, ml, l")
     public String unit;
 
-    public ProductDTO() {}
+    public ProductDTO() {
+        // Required by frameworks (Jackson / Spring) for object deserialization
+    }
 }
