@@ -155,5 +155,5 @@ sonar "-Dsonar.host.url=http://localhost:9000" "-Dsonar.token=<YOUR_TOKEN>" "-Ds
 # 👤 Author
 
 Ioan Robert Scumpu<br>
+Full-Stack Software Engineer @ Technology Reply Romania<br>
 Software Engineering Master’s Student<br>
-Full-Stack Developer Intern @ Technology Reply Romania<br>
